@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品管理</title>
+    <!-- jquery核心库 -->
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <!-- easyui核心库 -->
+    <script type="text/javascript" src="./js/jquery.easyui.min.js"></script>
+    <!-- easyui核心UI文件 css -->
+    <link href="./themes/default/easyui.css" rel="stylesheet" type="text/css"/>
+    <!-- easyui图标 -->
+    <link href="./themes/icon.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="css/baseCss.css">
+    <script>
+
+    </script>
+</head>
+<body>
+<script>
+    $(function () {
+        $('#dg').datagrid({
+            url: '/goods/queryAll',
+            title: '商品管理',
+            iconCls: 'icon-save',
+            pagination: true,
+            pageSize: 10,
+            pageList: [10, 20, 30, 40],
+            fit: true,
+            fitColumns: false,
+            nowarp: false,
+            border: false,
+            idField: 'id',
+            /* sortName:'id',
+          sortOrder: 'desc',*/
+            columns: [[{
+                title: '编号',
+                field: 'pid',
+                width: 100
+                /*sortable:true*/
+            }, {
+                title: '价格',
+                field: 'price',
+                width: 100
+
+            }, {
+                title: '商品名',
+                field: 'name',
+                width: 100
+
+            }, {
+                title: '商品描述',
+                field: 'desc',
+                width: 200
+            }, {
+                title: 'cid',
+                field: 'cid',
+                width: 100
+
+            }, {
+                title: 'path',
+                field: 'path',
+                width: 100
+
+            }, {
+                title: '库存',
+                field: 'stock',
+                width: 100
+
+            }]]
+        });
+    });
+
+    function newUser() {
+        $('#dlg').dialog('open').dialog('setTitle', '新增用户');
+        $('#fm').form('clear');
+        url = '/user/selectAll';
+    }
+
+    function editUser() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $('#dlg').dialog('open').dialog('setTitle', '编辑用户');
+            $('#fm').form('load', row);
+            url = '/goods/update/id=' + row.id;
+        }
+    }
+
+    function saveUser() {
+        $('#fm').form('submit', {
+            url: '/goods/update',
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.errorMsg) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close');		// close the dialog
+                    $('#dg').datagrid('reload');	// reload the user data
+                }
+            }
+        });
+    }
+
+    function destroyUser() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $.messager.confirm('确认', '你真的要删除么?', function (r) {
+                if (r) {
+                    $.post('/goods/delete/', {pid: row.id}, function (result) {
+                        if (result.success) {
+                            $('#dg').datagrid('reload');	// reload the user data
+                        } else {
+                            $.messager.show({	// show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    function search() {
+        $('#dg').datagrid('load', {
+            username: $('#manage_user_searchForm').find('[name=username]').val()
+        });
+    }
+
+</script>
+<!--<table id="dg"  fit="true" border="false" class="easyui-datagrid"
+       toolbar="#toolbar"
+       singleSelect="true">
+</table>-->
+<div class="easyui-layout" fit="true" border="false">
+    <div region="north" border="false" title="过滤" style="height: 110px;overflow: hidden;">
+        <form id="manage_user_searchForm">
+            <table class="tableForm datagrid-toolbar" style="width: 100%;height: 100%">
+                <tr>
+                    <th>用户名</th>
+                    <td><input name="username"/></td>
+
+                </tr>
+                <tr>
+                    <th>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="search()">查询</a>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="">清空</a>
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div region="center" border="false">
+        <table id="dg" fit="true" border="false"
+               toolbar="#toolbar"
+               singleSelect="true">
+        </table>
+    </div>
+</div>
+<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">用户信息</div>
+    <form id="fm" method="post">
+        <div class="fitem">
+            <input name="pid" style="display:none">
+        </div>
+        <div class="fitem">
+            <label>价格：</label>
+            <input name="price" class="easyui-validatebox" >
+        </div>
+        <div class="fitem">
+            <label>商品名：</label>
+            <input name="name" class="easyui-validatebox">
+        </div>
+        <div class="fitem">
+            <label>描述：</label>
+            <input name="desc" class="easyui-validatebox">
+        </div>
+        <div class="fitem">
+            <label>cid：</label>
+            <input name="cid" class="easyui-validatebox">
+        </div>
+        <div class="fitem">
+            <label>图片路径：</label>
+            <input name="path" class="easyui-validatebox">
+        </div>
+        <div class="fitem">
+            <label>库存：</label>
+            <input name="stock" class="easyui-validatebox">
+        </div>
+
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveUser()">保存</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+</div>
+<div id="toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">新增用户</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑用户</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">删除用户</a>
+</div>
+</body>

@@ -1,0 +1,225 @@
+<body>
+
+<!--<table id="dg"  fit="true" border="false" class="easyui-datagrid"
+       toolbar="#toolbar"
+       singleSelect="true">
+</table>-->
+<div class="easyui-layout" fit="true" border="false">
+    <div region="north" border="false" title="过滤" style="height: 110px;overflow: hidden;">
+        <form id="manage_user_searchForm">
+            <table class="tableForm datagrid-toolbar" style="width: 100%;height: 100%">
+                <tr>
+                    <th>用户名</th>
+                    <td><input name="username"/></td>
+                </tr>
+                <tr>
+                    <th>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="search()">查询</a>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="">清空</a>
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div region="center" border="false">
+        <table id="dg" fit="true" border="false"
+               toolbar="#toolbar"
+               singleSelect="true">
+        </table>
+    </div>
+</div>
+<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">订单信息</div>
+    <form id="fm" method="post">
+        <div class="fitem">
+            <input name="id" id="manage_form_id" style="display:none">
+        </div>
+        <div class="fitem">
+            <label>用户id：</label>
+            <input name="user_id" class="easyui-validatebox" required="true">
+        </div>
+        <div class="fitem">
+            <label>商品id</label>
+            <input name="user_id" class="easyui-validatebox" required="true">
+        </div>
+        <div class="fitem">
+            <label>商品数量</label>
+            <input name="goodscount">
+        </div>
+        <div class="fitem">
+            <label>商品总价</label>
+            <input name="totolprice">
+        </div>
+        <div class="fitem">
+            <label>地址</label>
+            <input name="address">
+        </div>
+        <div class="fitem">
+            <label>订单状态</label>
+            <input name="status">
+        </div>
+
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="check1()">保存</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+</div>
+<div id="toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">新增订单</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑订单</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">删除订单</a>
+</div>
+<script>
+    $(function () {
+        $('#dg').datagrid({
+            url: '/order/selectAll',
+            title: '订单管理',
+            iconCls: 'icon-save',
+            pagination: true,
+            pageSize: 10,
+            pageList: [10, 20, 30, 40],
+            fit: true,
+            fitColumns: false,
+            nowarp: false,
+            border: false,
+            idField: 'id',
+            /* sortName:'id',
+          sortOrder: 'desc',*/
+            columns: [[{
+                title: '订单编号',
+                field: 'oid',
+                width: 100
+                /*sortable:true*/
+            }, {
+                title: '用户名',
+                field: 'username',
+                width: 100
+
+            }, {
+                title: '商品ID',
+                field: 'user_id',
+                width: 100
+            }, {
+                title: '商品数量',
+                field: 'goodscount',
+                width: 100
+
+            }, {
+                title: '总价',
+                field: 'totalprice',
+                width: 100
+
+            }, {
+                title: '地址',
+                field: 'addres',
+                width: 100
+
+            }, {
+                title: '订单状态',
+                field: 'status',
+                width: 100
+
+            }]]
+        });
+    });
+
+    function newUser() {
+        var check_flag = 1;
+        $('#dlg').dialog('open').dialog('setTitle', '新增用户');
+        $('#fm').form('clear');
+        //url = '/user/insert';
+    }
+
+    function addNewUser() {
+        alert(1);
+         $('#fm').form('submit', {
+             url: '/user/insert',
+             onSubmit: function () {
+                 return $(this).form('validate');
+             },
+             success: function (result) {
+                 var result = eval('(' + result + ')');
+                 if (result.errorMsg) {
+                     $.messager.show({
+                         title: 'Error',
+                         msg: result.errorMsg
+                     });
+                 } else {
+                     $('#dlg').dialog('close');		// close the dialog
+                     $('#dg').datagrid('reload');	// reload the user data
+                 }
+             }
+         });
+    }
+
+    function editUser() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $('#dlg').dialog('open').dialog('setTitle', '编辑用户');
+            $('#fm').form('load', row);
+            url = '/user/update/id=' + row.id;
+        }
+    }
+
+    function saveUser() {
+        $('#fm').form('submit', {
+            url: '/user/update',
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.errorMsg) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close');		// close the dialog
+                    $('#dg').datagrid('reload');	// reload the user data
+                }
+            }
+        });
+    }
+
+    function destroyUser() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $.messager.confirm('确认', '你真的要删除么?', function (r) {
+                if (r) {
+                    $.post('/user/delete/', {id: row.id}, function (result) {
+                        if (result.success) {
+                            $('#dg').datagrid('reload');	// reload the user data
+                        } else {
+                            $.messager.show({	// show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+
+    function search() {
+        $('#dg').datagrid('load', {
+            username: $('#manage_user_searchForm').find('[name=username]').val()
+        });
+    }
+
+    function check1() {
+         var post_id = $('#manage_form_id').val();
+         console.log(post_id);
+         if (post_id > 0) {
+             saveUser();
+         } else {
+             alert(1);
+             addNewUser();
+         }
+    }
+
+</script>
+</body>

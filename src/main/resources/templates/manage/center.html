@@ -1,0 +1,192 @@
+<body>
+
+<!--<table id="dg"  fit="true" border="false" class="easyui-datagrid"
+       toolbar="#toolbar"
+       singleSelect="true">
+</table>-->
+<div class="easyui-layout" fit="true" border="false">
+    <div region="north" border="false" title="过滤" style="height: 110px;overflow: hidden;">
+        <form id="manage_user_searchForm">
+            <table class="tableForm datagrid-toolbar" style="width: 100%;height: 100%">
+                <tr>
+                    <th>用户名</th>
+                    <td><input name="username"/></td>
+                </tr>
+                <tr>
+                    <th>
+                        <a  href="javascript:void(0);" class="easyui-linkbutton" onclick="searchById()">查询</a>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="">清空</a>
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div region="center" border="false">
+        <table id="dg" fit="true" border="false"
+               toolbar="#toolbar"
+               singleSelect="true">
+        </table>
+    </div>
+</div>
+<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">用户信息</div>
+    <form id="fm" method="post">
+        <div class="fitem">
+            <input name="id" id="manage_form_id" style="display:none">
+        </div>
+        <div class="fitem">
+            <label>用户名：</label>
+            <input name="username" class="easyui-validatebox" required="true">
+        </div>
+        <div class="fitem">
+            <label>密码</label>
+            <input name="password" class="easyui-validatebox" required="true">
+        </div>
+        <div class="fitem">
+            <label>性别</label>
+            <input name="gender">
+        </div>
+
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-ok" onclick="check1()">保存</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+</div>
+<div id="toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">新增用户</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑用户</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">删除用户</a>
+</div>
+<script type="text/javascript">
+    var add;
+    $(function () {
+        $('#dg').datagrid({
+            url: '/user/selectAll',
+            title: '用户管理',
+            iconCls: 'icon-save',
+            pagination: true,
+            pageSize: 10,
+            pageList: [10, 20, 30, 40],
+            fit: true,
+            fitColumns: false,
+            nowarp: false,
+            border: false,
+            idField: 'id',
+            /* sortName:'id',
+          sortOrder: 'desc',*/
+            columns: [[{
+                title: '编号',
+                field: 'id',
+                width: 100
+                /*sortable:true*/
+            }, {
+                title: '用户名',
+                field: 'username',
+                width: 100
+
+            }, {
+                title: '密码',
+                field: 'password',
+                width: 100
+            }, {
+                title: '性别',
+                field: 'gender',
+                width: 100
+
+            }]]
+        });
+    });
+
+    function newUser() {
+        add = 1;
+        $('#dlg').dialog('open').dialog('setTitle', '新增用户');
+        $('#fm').form('clear');
+        //url = '/user/insert';href="javascript:void(0);"
+    }
+
+    function addNewUser() {
+        $('#fm').form('submit', {
+            url: '/user/insert',
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            dataType: "text",
+            async: false,
+            success: function (result) {
+                if (result === "ok") {
+                    $('#dlg').dialog('close');		// close the dialog
+                    $('#dg').datagrid('reload');	// reload the user data
+                }
+            }
+        });
+    }
+
+    function editUser() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $('#dlg').dialog('open').dialog('setTitle', '编辑用户');
+            $('#fm').form('load', row);
+            url = '/user/update/id=' + row.id;
+        }
+    }
+
+    function saveUser() {
+        $('#fm').form('submit', {
+            url: '/user/update',
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            dataType: "text",
+            async: false,
+            success: function (result) {
+                if (result === "ok") {
+                    $('#dlg').dialog('close');		// close the dialog
+                    $('#dg').datagrid('reload');	// reload the user data
+                }
+
+            }
+        });
+        $('#dlg').dialog('close');		// close the dialog
+        $('#dg').datagrid('reload');	// reload the user data
+    }
+
+    function destroyUser() {
+        var row = $('#dg').datagrid('getSelected');
+        if (row) {
+            $.messager.confirm('确认', '你真的要删除么?', function (r) {
+                if (r) {
+                    $.post('/user/delete/', {id: row.id}, function (result) {
+                        async :false
+                        if (result.success) {
+                            $('#dg').datagrid('reload');	// reload the user data
+                        } else {
+                            $.messager.show({	// show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    }, 'json');
+                }
+            });
+        }
+    }
+    function searchById() {
+
+
+         $('#dg').datagrid('load', {
+             username: $('#manage_user_searchForm').find('[name=username]').val(),
+         });
+    }
+
+    function check1() {
+        if (add!==1) {
+            saveUser();
+        } else {
+            addNewUser();
+        }
+    }
+
+</script>
+</body>

@@ -1,0 +1,58 @@
+spring:
+  datasource:
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    driverClassName: com.mysql.jdbc.Driver
+    filters: stat,wall,log4j
+    initialSize: 5
+    maxActive: 20
+    maxPoolPreparedStatementPerConnectionSize: 20
+    maxWait: 60000
+    minEvictableIdleTimeMillis: 300000
+    minIdle: 5
+    password: feng_sha
+    poolPreparedStatements: true
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    timeBetweenEvictionRunsMillis: 60000
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/edu?useUnicode=true&characterEncoding=utf-8
+    username: root
+    validationQuery: SELECT 1 FROM DUAL
+  freemarker:
+    request-context-attribute: request
+  mvc:
+    # 静态文件请求匹配方式
+    #用于阐述HTTP请求地址
+    static-path-pattern: /**
+    view:
+      #前端页面的后缀
+      suffix: .html
+  resources:
+    #则用于描述静态资源的存放位置
+    static-locations: 'classpath: /META-INF/resources/,classpath:/resources/,classpath:/static,classpath:/public/,classpath:/templates/'
+  thymeleaf:
+    #开发时关闭缓存,不然没法看到实时页面
+    cache: false
+    encoding: UTF-8
+    mode: LEGACYHTML5
+    prefix: classpath:/templates/
+  #邮箱配置
+  mail:
+    host: smtp.126.com
+    username: wky809982944@126.com
+    #邮箱的授权码
+    password: wangkaiyi12345
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+#邮件发件人
+mail:
+  fromMail:
+    addr: wky809982944@126.com
+
