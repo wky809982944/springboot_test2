@@ -55,4 +55,6 @@ spring:
 mail:
   fromMail:
     addr: wky809982944@126.com
-
+server:
+  #端口号
+  port: 9001

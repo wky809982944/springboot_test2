@@ -175,9 +175,8 @@ public class UserController {
         String id = Long.toString(userService.register(username, password));
         //发送邮件
         String postEmail = "\"" + email + "\"";
-        mailService.sendMail(postEmail, "主题：激活邮件", id);
+        mailService.sendMail("823439163@qq.com", "主题：激活邮件", id);
         return "success";
     }
-
 
 }

@@ -41,9 +41,22 @@ public class GoodsServiceImpl {
     }
 
     public List<Goods> searchByName(String name) {
+/*
+        创建一个Example,参数为类名.class
+*/
         Example example = new Example(Goods.class);
+/*
+        给例子创建一个标准
+*/
         Example.Criteria  criteria = example.createCriteria();
+
+/*
+        字符串匹配是orLike,前面填name，后面拼接%和name
+*/
         criteria.orLike("name","%" +name+"%");
+/*
+        根据例子查询
+*/
         List<Goods> goods = goodsMapper.selectByExample(example);
         return goods;
     }

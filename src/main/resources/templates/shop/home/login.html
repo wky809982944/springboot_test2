@@ -15,7 +15,12 @@
     <link href="../css/dlstyle.css" rel="stylesheet" type="text/css">
     <script src="../js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript">
+        $(function () {
+
+            console.log(3);
+        });
         function login() {
+
             var password = $("#password").val();
             var username = $("#user").val();
             $.post("/user/login",

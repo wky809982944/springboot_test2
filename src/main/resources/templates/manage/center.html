@@ -62,6 +62,8 @@
 <script type="text/javascript">
     var add;
     $(function () {
+
+
         $('#dg').datagrid({
             url: '/user/selectAll',
             title: '用户管理',
@@ -69,8 +71,8 @@
             pagination: true,
             pageSize: 10,
             pageList: [10, 20, 30, 40],
-            fit: true,
-            fitColumns: false,
+            fit: false,
+            fitColumns: true,
             nowarp: false,
             border: false,
             idField: 'id',
@@ -79,21 +81,21 @@
             columns: [[{
                 title: '编号',
                 field: 'id',
-                width: 100
+                width: 300
                 /*sortable:true*/
             }, {
                 title: '用户名',
                 field: 'username',
-                width: 100
+                width: 300
 
             }, {
                 title: '密码',
                 field: 'password',
-                width: 100
+                width: 300
             }, {
                 title: '性别',
                 field: 'gender',
-                width: 100
+                width: 300
 
             }]]
         });

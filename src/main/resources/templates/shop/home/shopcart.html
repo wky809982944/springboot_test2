@@ -21,7 +21,7 @@
 		<!--顶部导航条 -->
 		<div class="am-container header">
 			<ul class="message-l">
-				<div class="topMessage">
+				<div class="topMessage" id="loginBar">
 					<div class="menu-hd">
 						<a href="#" target="_top" class="h">亲，请登录</a>
 						<a href="#" target="_top">免费注册</a>
@@ -167,10 +167,10 @@
 										</div>
 									</li>
 								</ul>
-								
-								
-								
-								
+
+
+
+
 								<ul class="item-content clearfix">
 									<li class="td td-chk">
 										<div class="cart-checkbox ">
@@ -234,10 +234,10 @@
 										</div>
 									</li>
 								</ul>
-													
-								
-								
-								
+
+
+
+
 							</div>
 						</div>
 					</tr>
@@ -444,9 +444,19 @@
 		<div class="navCir">
 			<li><a href="home.html"><i class="am-icon-home "></i>首页</a></li>
 			<li><a href="sort.html"><i class="am-icon-list"></i>分类</a></li>
-			<li class="active"><a href="shopcart.html"><i class="am-icon-shopping-basket"></i>购物车</a></li>	
-			<li><a href="../person/index.html"><i class="am-icon-user"></i>我的</a></li>					
+			<li class="active"><a href="shopcart.html"><i class="am-icon-shopping-basket"></i>购物车</a></li>
+			<li><a href="../person/index.html"><i class="am-icon-user"></i>我的</a></li>
 		</div>
 	</body>
+	<script src="../js/getUser.js"></script>
+	<script type="text/javascript">
+		var user;
+		$(function () {
+			user = getUser();
+			$("#userName").text(user.username);
+			$("#userId").val(user.id);
+			console.log(user);
+		});
 
+	</script>
 </html>

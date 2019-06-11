@@ -25,7 +25,7 @@ public class OrderController {
     @Autowired
     private OrderServiceImpl orderService;
 
-    @PostMapping("/createOrderSession")
+   /* @PostMapping("/createOrderSession")
     public ResponseEntity<Void> createOrder(
             @RequestParam(value = "user_id") Long user_id,
             @RequestParam(value = "goods_id") Long goods_id,
@@ -43,7 +43,7 @@ public class OrderController {
         request.getSession().setAttribute("status", status);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
+*/
     @PostMapping("/createOrder")
     public ResponseEntity<Void> createOrder(
             @RequestParam(value = "user_id") Long user_id,
@@ -55,7 +55,7 @@ public class OrderController {
         orderService.createOrder(user_id, goods_id, goodscout, totalprice, address, status);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-  /*  @PostMapping("/getOrderSession")
+    @PostMapping("/getOrderSession")
     public ResponseEntity<Order> createOrder(
             HttpServletRequest request){
         Long user_id = (Long) request.getSession().getAttribute("Long user_id");
@@ -66,7 +66,7 @@ public class OrderController {
         Long status = (Long) request.getSession().getAttribute("status");
         Order order = new Order(user_id,goods_id,goodscout,totalprice,address,status);
         return ResponseEntity.status(HttpStatus.OK).build();
-    }*/
+    }
 
     /*    @PostMapping("/createOrder")
         public ModelAndView createOrder(String username,

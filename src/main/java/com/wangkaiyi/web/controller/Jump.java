@@ -1,6 +1,7 @@
 package com.wangkaiyi.web.controller;
 
 import com.wangkaiyi.mapper.UserMapper;
+import com.wangkaiyi.model.User;
 import com.wangkaiyi.service.GoodsServiceImpl;
 import com.wangkaiyi.service.Impl.MailServiceImpl;
 import com.wangkaiyi.service.MailService;
@@ -64,9 +65,11 @@ public class Jump {
         return "redirect:/shop/person/index.html";
     }
     @RequestMapping(value = "/user/activation/{id}", method = RequestMethod.GET)
-    public String activation(@PathVariable Long id) {
+    public String activation(@PathVariable Long id,HttpServletRequest request) {
         userService.activation(id);
-        return "redirect:/shop/home.html";
+        User user = userService.queryById(id);
+        request.getSession().setAttribute("username", user.getUsername());
+        return "redirect:/shop/home/home.html";
     }
 
 }

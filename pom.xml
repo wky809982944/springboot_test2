@@ -7,7 +7,7 @@
   <groupId>com.wangkaiyi</groupId>
   <artifactId>springboot_test2</artifactId>
   <version>1.0-SNAPSHOT</version>
-
+  <packaging>jar</packaging><!-- 以jar包形式打包 -->
   <name>springboot_test2</name>
 
   <properties>
@@ -16,6 +16,7 @@
     <maven.compiler.target>1.7</maven.compiler.target>
       <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
       <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
+    <project.bu></project.bu>
   </properties>
 
   <!--spring boot  父依赖 -->
@@ -50,6 +51,20 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>jackson-annotations</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jackson-core</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jackson-databind</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- 引入freeMarker的依赖包. -->
@@ -82,6 +97,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- jta 管理多个数据源的事务-->
     <dependency>
@@ -93,6 +114,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- AOP -->
     <dependency>
@@ -114,6 +141,20 @@
       <groupId>tk.mybatis</groupId>
       <artifactId>mapper-spring-boot-starter</artifactId>
       <version>2.1.5</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>mapper-base</artifactId>
+          <groupId>tk.mybatis</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>mapper-core</artifactId>
+          <groupId>tk.mybatis</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>mapper-extra</artifactId>
+          <groupId>tk.mybatis</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>tk.mybatis</groupId>
@@ -139,6 +180,16 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>2.9.9</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>jackson-annotations</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jackson-core</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
     <dependency>
